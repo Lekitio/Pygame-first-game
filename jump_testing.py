@@ -10,7 +10,7 @@ display_main = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 running = True
 
-GRAVITY = 500
+GRAVITY = 700
 
 all_sprites = pygame.sprite.Group()
 class player(pygame.sprite.Sprite):
@@ -24,7 +24,7 @@ class player(pygame.sprite.Sprite):
         self.velocity = pygame.math.Vector2(0, 0)
         #Jumping physics
         self.on_ground = True
-        self.jump_force = 500
+        self.jump_force = 600
 
         #jump cooldown
         self.can_jump = True
@@ -32,16 +32,17 @@ class player(pygame.sprite.Sprite):
         self.jump_cooldown = 100
         self.current_jump_time = 0
         self.landed = False #this isnt optimal
+        self.jump_key = pygame.K_z
 
 
     # def jump(self):
     #     keys = pygame.key.get_pressed()
-    #     if keys[pygame.K_x]:
+    #     if keys[self.jump_key]:
             
     #         self.velocity.y += GRAVITY
     #         self.direction.y -= self.velocity.y
         
-    #     elif not keys[pygame.K_x] and self.moving_up:
+    #     elif not keys[self.jump_key] and self.moving_up:
     #         self.velocity.y = 0
     #         self.direction.y =- GRAVITY
 
@@ -54,7 +55,7 @@ class player(pygame.sprite.Sprite):
     def update(self):
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_x] and self.on_ground and self.can_jump:
+        if keys[self.jump_key] and self.on_ground and self.can_jump:
             # self.rect.centery = 1
             self.velocity.y = -self.jump_force
             self.on_ground = False
@@ -63,11 +64,11 @@ class player(pygame.sprite.Sprite):
 
         # downwards
         if self.velocity.y > 0:
-            self.velocity.y += 0.9
+            self.velocity.y += 2
 
         #if släppa and upwards
-        if not keys[pygame.K_x] and self.velocity.y < 0:
-            self.velocity.y = 0
+        if not keys[self.jump_key] and self.velocity.y < 0:
+            self.velocity.y *= 0.05
 
         # fall faster
         if self.velocity.y > 0: #going 
