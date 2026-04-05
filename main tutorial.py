@@ -14,6 +14,9 @@ main_display = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Game name")
 #this gives the window a name
 
+#importing all images
+japanese_pillar_1_surf = pygame.image.load(join("images", "Japanese_rock_pillar1.png")).convert_alpha()
+
 clock = pygame.time.Clock() #caps the framerate, Otherwise it runs infinitely fast
 
 def in_frame_checker(name, height, width):
@@ -39,20 +42,85 @@ class Player(pygame.sprite.Sprite):
         w = 50
         h = 80
         self.image = pygame.Surface((w, h))
-        self.rect = self.image.get_frect(topleft = (10,10))
-        self.direction = pygame.math.Vector2(1, 1) #defult
-        self.speed = 300
+        self.rect = self.image.get_frect(bottomleft = (10, ground.top))
+        self.direction = pygame.math.Vector2(1, 0) #defult
+        self.speed = 200
+
+        #Jump timer
+        self.can_jump = True
+        self.last_jump_time = 0
+        self.gravity = 1500
+        self.on_ground = True
+        self.cooldown_jump = 100
+        self.jump_button = pygame.K_x
+        
+        #Slash
+        self.can_slash = True
+        self.last_slash_time = 0
+        self.cooldown_slash = 1000
+
+    # def jump(self):
+    #     self.direction.y = -1
+    
+    def falling_motion(self):
+        if self.rect.bottom > ground.top: #fall while above ground
+            # for i in range(20):
+            #     self.direction.y += i/10
+            self.direction.y *= 0.5
+        else:
+            # self.direction.y = 0
+            self.rect.bottom = ground.top
+            self.on_ground = True
+            # self.cooldown_jump = pygame.time.get_ticks() #if i wanna make on ground timer
+            return True
+        
+
+    def jump_timer(self):
+        #while holding the key jump unless jumped for x time or hit roof
+
+        keys = pygame.key.get_pressed()
+        if not self.can_jump: #runs always
+            self.direction.y = -1
+            current_jump_time = pygame.time.get_ticks()
+            if current_jump_time > self.last_jump_time + self.cooldown_jump and not keys[self.jump_button]:
+                self.falling = True
+                self.can_jump = True #Can always jump ig? Or maybe cooldown based on floor
+            #gets current time 
+        else:
+            return self.falling_motion()
+    
+    def slash_timer(self):
+        if not self.can_slash:
+            current_slash_time = pygame.time.get_ticks()
+            if current_slash_time > self.last_slash_time + self.cooldown_slash:
+                self.can_slash = True
+            
 
     def update(self):
         #update() will run this
         keys = pygame.key.get_pressed() #this is a dictionary of all the keys
         self.direction.x = keys[pygame.K_RIGHT]-keys[pygame.K_LEFT] #this jsut turns True -> 1, crazy
-        self.rect.center += self.direction * self.speed * delta_time #can control speed
+        self.rect.centerx += self.direction.x * self.speed * delta_time #can control speed
+        self.rect.centery += self.direction.y * delta_time
         in_frame_checker(player, height, width) #makes sure its in frame
 
+        #Getting inputs
+        # jumping mechanism
+        if keys[self.jump_button] and self.can_jump and self.on_ground: #only triggered once because can_jump -> False
+            self.can_jump = False
+            self.last_jump_time = pygame.time.get_ticks()
+        self.can_jump = self.jump_timer()
+        # print(self.falling)
+        # Getting inputs
+        
         recent_keys = pygame.key.get_just_pressed()
-        if recent_keys[pygame.K_SPACE]:
+        if recent_keys[pygame.K_SPACE] and self.can_slash:
             print("pew")
+            self.can_slash = False
+            self.last_slash_time = pygame.time.get_ticks()
+        self.slash_timer()
+        
+
 
 class Object1(pygame.sprite.Sprite):
     def __init__(self, group, image):
@@ -83,7 +151,6 @@ ground = pygame.Rect(0, 400, 900, 500)
 
 #creating objects, order matter.
 #   created first -> gets covered
-japanese_pillar_1_surf = pygame.image.load(join("images", "Japanese_rock_pillar1.png")).convert_alpha()
 for i in range(10):
     Object1(all_sprites, japanese_pillar_1_surf)
 player = Player(all_sprites)
