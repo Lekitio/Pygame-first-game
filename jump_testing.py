@@ -33,6 +33,7 @@ class player(pygame.sprite.Sprite):
         self.current_jump_time = 0
         self.landed = False #this isnt optimal
         self.jump_key = pygame.K_z
+        self.jump_speed_cap = 600
 
 
     # def jump(self):
@@ -51,29 +52,28 @@ class player(pygame.sprite.Sprite):
             self.current_jump_time = pygame.time.get_ticks()
             if self.current_jump_time >= self.last_jump_time + self.jump_cooldown:
                 self.can_jump = True
-
-    def update(self):
-        keys = pygame.key.get_pressed()
-
+    def jump(self, keys, delta_time):
         if keys[self.jump_key] and self.on_ground and self.can_jump:
             # self.rect.centery = 1
             self.velocity.y = -self.jump_force
             self.on_ground = False
 
         self.velocity.y += GRAVITY * delta_time #always affected by gravity
-
+        
+        
         # downwards
         if self.velocity.y > 0:
-            self.velocity.y += 2
-
+            self.velocity.y += 0.2 * GRAVITY * delta_time
+            #why times delta_time here?
+            
         #if släppa and upwards
         if not keys[self.jump_key] and self.velocity.y < 0:
             self.velocity.y *= 0.05
 
-        # fall faster
-        if self.velocity.y > 0: #going 
-            self.velocity.y += GRAVITY * 0.5 * delta_time
-        
+
+        # a speed cap
+        self.velocity.y = min(self.jump_speed_cap, self.velocity.y)
+
         #set actions into place
         self.rect.centery += self.velocity.y * delta_time
 
@@ -86,6 +86,11 @@ class player(pygame.sprite.Sprite):
             self.velocity.y = 0
 
         self.can_jump_cooldown()
+
+    def update(self):
+        keys = pygame.key.get_pressed()
+        self.jump(keys, delta_time)
+        
 
 hanako = player(all_sprites)
 
