@@ -16,6 +16,9 @@ pygame.display.set_caption("Game name")
 
 #importing all images
 japanese_pillar_1_surf = pygame.image.load(join("images", "Japanese_rock_pillar1.png")).convert_alpha()
+fog_nr_1_surf = pygame.image.load(join("images", "fog_nr_1.png")).convert_alpha()
+font = pygame.font.Font(None, 50)
+text_surf = font.render("Text", True, "red")
 
 clock = pygame.time.Clock() #caps the framerate, Otherwise it runs infinitely fast
 
@@ -131,21 +134,54 @@ class Player(pygame.sprite.Sprite):
         self.slash_timer()
 
 
-class Object1(pygame.sprite.Sprite):
-    def __init__(self, image, group):
-        super().__init__(group)
+class GameObjects(pygame.sprite.Sprite): #this means that GameObjects is a child of sprite, can do sprite stuff
+    def __init__(self, image, pos, groups, scale=None, scale_by=None):
+        super().__init__(groups)
+        if scale:
+            self.image = pygame.transform.scale(image, scale)
+        elif scale_by:
+            self.image = pygame.transform.scale_by(image, scale_by)
+        else:
+            self.image = image #dont change it
+        self.rect = self.image.get_frect(midbottom = pos)
+
+class Object1(GameObjects):
+    def __init__(self, image, groups):
+        pos = (randint(0, WIDTH), ground.top + 30)
+        super().__init__(image, pos, groups, scale=(100, 150))
         #question if you grandparent gets updated then do you also update
         # self.image = pygame.image.load(join("images", "Japanese_rock_pillar1.png")).convert_alpha()
         #import every time, inefficient time
         
-        self.image = image
 
-        self.image = pygame.transform.scale(self.image, (100, 150))
+        # self.image = pygame.transform.scale(image, (100, 150))
         #bahahahhahaha you can squish the import
         # self.rect = self.image.get_bounding_rect() This is what i should use honestly OR just fix the art from the beginning
-        self.rect = self.image.get_frect(midbottom = (randint(0, WIDTH), ground.top + 30))
+        # self.rect = self.image.get_frect(midbottom = (randint(0, WIDTH), ground.top + 30))
         # its currently transparent so i need to move it down, hardcoded
 
+class Fog(GameObjects): #Since its so similar i can jst call to a parent class
+    def __init__(self, image, groups):
+        pos = (randint(0, WIDTH), randint(100, ground.top +30))
+        super().__init__(image, pos, groups, scale_by=0.1) #refers to parent
+        # self.image = image
+        # self.image = pygame.transform.scale_by(self.image, 0.1)
+        # self.rect = self.image.get_frect(midbottom = (randint(0, WIDTH), randint(100, ground.top +30)))
+        
+        self.velocity = pygame.math.Vector2(1, 0)
+        self.speed = randint(1, 5)
+
+    def update(self):
+        if self.rect.left > WIDTH:
+            self.kill()
+            # print("death")
+        self.rect.x += self.velocity.x * delta_time * self.speed
+
+def collision_pillar(sprite_group):
+    #Test colission #sprite and rect check manualspritecollide(single, lst, dokill)
+    collided = pygame.sprite.spritecollide(player, sprite_group, False)
+    for pillar in collided:
+        pygame.draw.rect(main_display, floor_color, pygame.FRect(pillar.rect.centerx-10, pillar.rect.top-30, 30, 30))
 
 
 all_sprites = pygame.sprite.Group()
@@ -163,6 +199,10 @@ japanese_pillar_1_sprites = pygame.sprite.Group() #more organised, usually for u
 for i in range(10):
     Object1(japanese_pillar_1_surf, (all_sprites, japanese_pillar_1_sprites))
 player = Player(all_sprites)
+
+all_fog_sprites = pygame.sprite.Group()
+for i in range(10):
+    Fog(fog_nr_1_surf, (all_sprites, all_fog_sprites))
 
 # pygame.FRect((0, 520), (900, 300))
 #FRects are rectangles but with decimals -> more precise #Rectangles can give you acess to a bunch of useful points of the rectangle -> less math #for storing coordinates
@@ -192,15 +232,9 @@ while running:
 
     all_sprites.draw(main_display)
 #.update() - updates every spite, inbyggd in sprite to appear or something #.draw() blit the sprite images #gets everything in the group to appear i guess
+    collision_pillar(japanese_pillar_1_sprites)
 
-
-    #Test colission #sprite and rect check manualspritecollide(single, lst, dokill)
-    
-    collided = pygame.sprite.spritecollide(player, japanese_pillar_1_sprites, False)
-    for pillar in collided:
-        pygame.draw.rect(main_display, floor_color, pygame.FRect(pillar.rect.centerx-10, pillar.rect.top-30, 30, 30))
-        #hardcoding position fixes
-
+    # main_display.blit(fog_1)
     pygame.display.update()
     #updates background every loop
 
