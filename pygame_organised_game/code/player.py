@@ -4,8 +4,9 @@ from settings import *
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, collision_sprites):
         super().__init__(groups)
+        self.scalar = 0.16
         self.image = pygame.image.load(join("images", "playerdeafult5.png")).convert_alpha()
-        self.image = pygame.transform.smoothscale_by(self.image, 0.19)
+        self.image = pygame.transform.smoothscale_by(self.image, self.scalar)
         # self.image.fill((30,50,50))
         self.rect = self.image.get_frect(bottomleft = pos)
         self.hitbox_rect = self.rect.inflate(-40, -10)
@@ -38,8 +39,7 @@ class Player(pygame.sprite.Sprite):
 
     def input(self, dt):
         keys = pygame.key.get_pressed()
-        # preferably get_just_pressed but that doesnt seem to exist
-        # if pygame.key.get_just_pressed()[pygame.K_x] and self.on_ground:
+        # preferably get_just_pressed but bugs out # if pygame.key.get_just_pressed()[pygame.K_x] and self.on_ground:
         self.jump(keys, dt) # changes y velocity
         self.velocity.x = int(keys[pygame.K_RIGHT]) - int(keys[pygame.K_LEFT])
 
