@@ -4,4 +4,4 @@ from os.path import join
 
 WINDOW_WIDTH, WINDOW_HEIGHT = 900, 600
 TILE_SIZE = 128
-GRAVITY = 1300
+GRAVITY = 0 #1300

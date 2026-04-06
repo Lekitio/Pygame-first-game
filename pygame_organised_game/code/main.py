@@ -6,6 +6,7 @@
 from settings import * #all, includes pygame
 from player import Player
 from sprites import *
+from groups import AllSprites
 
 from random import randint
 from pytmx.util_pygame import load_pygame
@@ -20,7 +21,7 @@ class Game:
         self.running = True
 
         # Groups
-        self.all_sprites = pygame.sprite.Group()
+        self.all_sprites = AllSprites()
         self.collisions_sprites = pygame.sprite.Group()
 
         self.setup()
@@ -30,14 +31,15 @@ class Game:
         
     
     def setup(self):
-        the_map = load_pygame(join("Tiles", "map1_new.tmx"))
+        the_map = load_pygame(join("Tiles", "Map", "map1.tmx"))
         # for obj in the_map.get_layer_by_name("object1 or something liek that"): THIS IS JUST FOR OBJECTS
         #     print(obj.x, obj.y, obj.image)
             # CollisionSprite((obj.x, obj.y), obj.image, [self.all_sprites, self.collisions_sprites]) #pos, surf, groups
 
         for x, y, image in the_map.get_layer_by_name("Tile Layer 1").tiles():
             VisualSprite((x*TILE_SIZE, y*TILE_SIZE), image, self.all_sprites)
-    
+            # pygame.Surface.blit(self.main_display, image, )
+
     def run(self):
         while self.running:
             dt = self.clock.tick() / 1000
@@ -54,7 +56,7 @@ class Game:
             self.all_sprites.update(dt)
 
             # draw
-            self.all_sprites.draw(self.main_display)
+            self.all_sprites.draw(self.player.rect.center)
             pygame.display.update()
 
         pygame.quit()
