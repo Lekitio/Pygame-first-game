@@ -1,0 +1,76 @@
+{
+    "activeFile": "Map3/untitled.tmx",
+    "expandedProjectPaths": [
+        ".",
+        "Actual tilesets",
+        "Map3"
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "Actual tilesets/tes1 (64).tsx": {
+            "scaleInDock": 0.5,
+            "scaleInEditor": 4
+        },
+        "Actual tilesets/test2 (128).tsx": {
+            "scaleInDock": 0.5,
+            "scaleInEditor": 4
+        },
+        "Actual tilesets/test3 (512).tsx": {
+            "scaleInDock": 0.125,
+            "scaleInEditor": 0.75
+        },
+        "Actual tilesets/walking_tiles 1.tsx": {
+            "scaleInDock": 0.25,
+            "scaleInEditor": 0.5
+        },
+        "Map2.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 279.5,
+                "y": 196.5
+            }
+        },
+        "Map2.tmx#test2 (128)": {
+            "scaleInEditor": 11
+        },
+        "Map3/tes1 (64-32).tsx": {
+            "scaleInDock": 0.5,
+            "scaleInEditor": 1
+        },
+        "Map3/untitled.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 409,
+                "y": 126.33333333333334
+            }
+        }
+    },
+    "last.imagePath": "C:/Users/Hanna/Documents/Codes/Pygame/Pygame-first-game/Tiles/Tilesets",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 32,
+    "map.tileWidth": 32,
+    "openFiles": [
+        "Map3/untitled.tmx",
+        "Actual tilesets/walking_tiles 1.tsx"
+    ],
+    "project": "Tiled peoject (32pixels).tiled-project",
+    "recentFiles": [
+        "Actual tilesets/walking_tiles 1.tsx",
+        "Map3/untitled.tmx",
+        "Map3/tes1 (64-32).tsx",
+        "Actual tilesets/test3 (512).tsx",
+        "Actual tilesets/test2 (128).tsx",
+        "Actual tilesets/tes1 (64).tsx",
+        "Map2.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 32,
+        "width": 32
+    }
+}

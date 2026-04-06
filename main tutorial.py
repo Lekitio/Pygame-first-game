@@ -23,7 +23,8 @@ class Player(pygame.sprite.Sprite):
     def init_display(self):
         w = 40
         h = 60
-        self.image = pygame.Surface((w, h))
+        # self.image = pygame.Surface((w, h))
+        self.image = pygame.transform.smoothscale_by(pygame.image.load(join("images", "playerdeafult5.png")).convert_alpha(), 0.2)
         self.rect = self.image.get_frect(bottomleft = (10, ground.top))
         self.mask = pygame.mask.from_surface(self.image)
         

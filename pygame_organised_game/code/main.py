@@ -31,7 +31,8 @@ class Game:
         
     
     def setup(self):
-        the_map = load_pygame(join("Tiles", "Map", "map1.tmx"))
+        the_map = load_pygame(join("Tiles", "Map3","untitled.tmx"))
+        # the_map = load_pygame(join("Tiles", "Map2.tmx"))
         # for obj in the_map.get_layer_by_name("object1 or something liek that"): THIS IS JUST FOR OBJECTS
         #     print(obj.x, obj.y, obj.image)
             # CollisionSprite((obj.x, obj.y), obj.image, [self.all_sprites, self.collisions_sprites]) #pos, surf, groups

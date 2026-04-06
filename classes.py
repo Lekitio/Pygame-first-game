@@ -195,3 +195,62 @@ class AnimatedDustLanding(pygame.sprite.Sprite):
         else:
             self.kill() #when done kill the animation
 
+
+
+def collision_pillar(sprite_group):
+    #Test colission #sprite and rect check manualspritecollide(single, lst, dokill)
+    collided = pygame.sprite.spritecollide(player, sprite_group, False) #you can specify if mask or not collide in fourth parameter. Mask very hardware intensive! pygame.sprite.collide_mask
+    for pillar in collided:
+        pygame.draw.rect(main_display, floor_color, pygame.FRect(pillar.rect.centerx-10, pillar.rect.top-30, 30, 30))
+
+#mandatory stuff
+pygame.init()
+#"gets pygame started up"
+
+#initial display # Pygame display info: https://www.pygame.org/docs/ref/display.html#pygame.display.init
+WIDTH, HEIGHT = 900, 600
+main_display = pygame.display.set_mode((WIDTH, HEIGHT)) 
+#this creates a screen, set_mode specifically
+
+pygame.display.set_caption("Game name")
+#this gives the window a name
+
+clock = pygame.time.Clock() #caps the framerate, Otherwise it runs infinitely fast
+
+#importing all images
+japanese_pillar_1_surf = pygame.image.load(join("images", "Japanese_rock_pillar1.png")).convert_alpha()
+fog_nr_1_surf = pygame.image.load(join("images", "fog_nr_1.png")).convert_alpha()
+land_dust_animation = [pygame.image.load(join("images", "Landing_dust_animation", f"{i}.png")).convert_alpha() for i in range(1, 7)]
+font = pygame.font.Font(join("images", "times.ttf"), 50)
+text_surf = font.render("Text", True, "red")
+#you could import sounds pygame.mixer.Sound(filename)
+
+#editing the imports
+for i in range(6):
+    land_dust_animation[i] = pygame.transform.scale_by(land_dust_animation[i], 0.1)
+#sound.set_volume(0.5) #half sound
+
+#constant
+GRAVITY = 1300
+#colors
+grey = (71, 68, 72) #colors the screen main_display.fill(grey). But i wanna do it constantly so into the game
+floor_color = (45, 35, 46)
+
+#displays and blocks and surfces
+#Makes the floor rectangle
+ground = pygame.Rect(0, 400, 900, 500)
+
+#sprite creating&grouping
+all_sprites = pygame.sprite.Group()#holds and manages all sprites, grandparent/super()
+japanese_pillar_1_sprites = pygame.sprite.Group() #more organised, usually for usually gonna get acessed but not as often as ex, player. Stuff
+all_fog_sprites = pygame.sprite.Group()
+
+#creating objects, order matter. created first -> gets covered. 
+for i in range(10):
+    Object1(japanese_pillar_1_surf, (all_sprites, japanese_pillar_1_sprites))
+player = Player(all_sprites)
+
+for i in range(10):
+    Fog(fog_nr_1_surf, (all_sprites, all_fog_sprites))
+
+

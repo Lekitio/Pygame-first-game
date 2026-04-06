@@ -4,8 +4,9 @@ from settings import *
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, collision_sprites):
         super().__init__(groups)
-        self.image = pygame.Surface((40, 60))
-        self.image.fill((30,50,50))
+        self.image = pygame.image.load(join("images", "playerdeafult5.png")).convert_alpha()
+        self.image = pygame.transform.smoothscale_by(self.image, 0.19)
+        # self.image.fill((30,50,50))
         self.rect = self.image.get_frect(bottomleft = pos)
         self.hitbox_rect = self.rect.inflate(-10, 0)
         #Movement
