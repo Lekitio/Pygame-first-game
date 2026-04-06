@@ -22,23 +22,23 @@ class Game:
 
         # Groups
         self.all_sprites = AllSprites()
-        self.collisions_sprites = pygame.sprite.Group()
+        self.collision_sprites = pygame.sprite.Group()
 
         self.setup()
 
         # Sprites
-        self.player = Player((WINDOW_WIDTH//2, WINDOW_HEIGHT//2), self.all_sprites, self.collisions_sprites)
+        self.player = Player((WINDOW_WIDTH//2, WINDOW_HEIGHT//2), self.all_sprites, self.collision_sprites)
         
     
     def setup(self):
-        the_map = load_pygame(join("Tiles", "Map3","untitled.tmx"))
+        the_map = load_pygame(join("Tiles", "Map3", "main_map.tmx"))
         # the_map = load_pygame(join("Tiles", "Map2.tmx"))
         # for obj in the_map.get_layer_by_name("object1 or something liek that"): THIS IS JUST FOR OBJECTS
         #     print(obj.x, obj.y, obj.image)
-            # CollisionSprite((obj.x, obj.y), obj.image, [self.all_sprites, self.collisions_sprites]) #pos, surf, groups
+            # CollisionSprite((obj.x, obj.y), obj.image, [self.all_sprites, self.collision_sprites]) #pos, surf, groups
 
-        for x, y, image in the_map.get_layer_by_name("Tile Layer 1").tiles():
-            VisualSprite((x*TILE_SIZE, y*TILE_SIZE), image, self.all_sprites)
+        for x, y, image in the_map.get_layer_by_name("Ground_main").tiles():
+            CollisionSprite((x*TILE_SIZE, y*TILE_SIZE), image, [self.all_sprites, self.collision_sprites])
             # pygame.Surface.blit(self.main_display, image, )
 
     def run(self):

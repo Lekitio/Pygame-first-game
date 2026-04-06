@@ -8,11 +8,13 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.smoothscale_by(self.image, 0.19)
         # self.image.fill((30,50,50))
         self.rect = self.image.get_frect(bottomleft = pos)
-        self.hitbox_rect = self.rect.inflate(-10, 0)
+        self.hitbox_rect = self.rect.inflate(-40, -10)
+
         #Movement
         self.velocity = pygame.math.Vector2()
         self.speed = 300
         self.collision_sprites = collision_sprites
+
         #Jump
         self.init_jump()
 
@@ -22,12 +24,13 @@ class Player(pygame.sprite.Sprite):
         self.current_jump_time = 0
         self.last_jump_time = 0
         self.on_ground = True
+        self.can_jump_check = True
 
         #constants
         self.jump_force = 800
         self.jump_key = pygame.K_z
         self.jump_cooldown = 100
-        self.jump_speed_cap = 600
+        self.jump_speed_cap = 800
         self.jump_velocity_multiplier = 0.6
 
         #pos change to checcking collisions instead
@@ -35,10 +38,15 @@ class Player(pygame.sprite.Sprite):
 
     def input(self, dt):
         keys = pygame.key.get_pressed()
+        # preferably get_just_pressed but that doesnt seem to exist
+        # if pygame.key.get_just_pressed()[pygame.K_x] and self.on_ground:
         self.jump(keys, dt) # changes y velocity
         self.velocity.x = int(keys[pygame.K_RIGHT]) - int(keys[pygame.K_LEFT])
 
     def move(self, dt):
+        self.velocity.y += GRAVITY * dt #always affected by gravity
+        self.velocity.y = min(self.jump_speed_cap, self.velocity.y)
+
         self.hitbox_rect.x += self.velocity.x * self.speed * dt
         self.collision("x")
         self.hitbox_rect.y += self.velocity.y * dt
@@ -51,12 +59,13 @@ class Player(pygame.sprite.Sprite):
             self.current_jump_time = pygame.time.get_ticks()
             if self.current_jump_time >= self.last_jump_time + self.jump_cooldown:
                 self.can_jump = True
+                self.can_jump_check = True
 
     def landing(self):
-        if self.on_ground == False:
+        if self.can_jump_check:
             self.last_jump_time = pygame.time.get_ticks()
-        self.on_ground = True
         self.velocity.y = 0
+        self.can_jump_check = False
         self.can_jump = False
         self.can_jump_cooldown()
 
@@ -64,7 +73,6 @@ class Player(pygame.sprite.Sprite):
         if keys[self.jump_key] and self.on_ground and self.can_jump:
             self.velocity.y = -self.jump_force
             self.on_ground = False
-        self.velocity.y += GRAVITY * delta_time #always affected by gravity
         
         # downwards
         if self.velocity.y > 0:
@@ -76,11 +84,10 @@ class Player(pygame.sprite.Sprite):
             self.velocity.y *= 0.1
 
         # a speed cap
-        self.velocity.y = min(self.jump_speed_cap, self.velocity.y)
 
 
     def collision(self, direction):
-        for sprite in self.collision_sprites:
+        for sprite in self.collision_sprites: #this is checking all
             if sprite.rect.colliderect(self.hitbox_rect):
                 if direction == "x":
                     if self.velocity.x > 0:
@@ -98,6 +105,7 @@ class Player(pygame.sprite.Sprite):
                     elif self.velocity.y > 0:
                         #moving down
                         self.hitbox_rect.bottom = sprite.rect.top
+                        self.on_ground = True
                         self.landing()
     
     def update(self, dt):

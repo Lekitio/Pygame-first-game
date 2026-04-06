@@ -1,10 +1,11 @@
 {
-    "activeFile": "Map3/main_map.tmx",
+    "activeFile": "Map3/untitled.tmx",
     "expandedProjectPaths": [
         ".",
         "Actual tilesets",
         "Map3"
     ],
+    "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "": {
             "scaleInDock": 1
@@ -22,16 +23,8 @@
             "scaleInEditor": 0.75
         },
         "Actual tilesets/walking_tiles 1.tsx": {
-            "scaleInDock": 0.75,
-            "scaleInEditor": 1
-        },
-        "Actual tilesets/walking_tiles 2.tsx": {
-            "scaleInDock": 1,
-            "scaleInEditor": 1
-        },
-        "Actual tilesets/walking_tiles_upscaled1.tsx": {
-            "scaleInDock": 0.5,
-            "scaleInEditor": 0.75
+            "scaleInDock": 0.25,
+            "scaleInEditor": 0.5
         },
         "Map2.tmx": {
             "scale": 1,
@@ -43,14 +36,6 @@
         },
         "Map2.tmx#test2 (128)": {
             "scaleInEditor": 11
-        },
-        "Map3/main_map.tmx": {
-            "scale": 0.33,
-            "selectedLayer": 0,
-            "viewCenter": {
-                "x": 540.9090909090908,
-                "y": 195.45454545454538
-            }
         },
         "Map3/tes1 (64-32).tsx": {
             "scaleInDock": 0.5,
@@ -66,18 +51,16 @@
         }
     },
     "last.imagePath": "C:/Users/Hanna/Documents/Codes/Pygame/Pygame-first-game/Tiles/Tilesets",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 32,
+    "map.tileWidth": 32,
     "openFiles": [
-        "Actual tilesets/walking_tiles 1.tsx",
-        "Actual tilesets/walking_tiles 2.tsx",
-        "Map3/main_map.tmx",
-        "Actual tilesets/walking_tiles_upscaled1.tsx"
+        "Map3/untitled.tmx",
+        "Actual tilesets/walking_tiles 1.tsx"
     ],
-    "project": "",
+    "project": "Tiled peoject (32pixels).tiled-project",
     "recentFiles": [
         "Actual tilesets/walking_tiles 1.tsx",
-        "Actual tilesets/walking_tiles 2.tsx",
-        "Actual tilesets/walking_tiles_upscaled1.tsx",
-        "Map3/main_map.tmx",
         "Map3/untitled.tmx",
         "Map3/tes1 (64-32).tsx",
         "Actual tilesets/test3 (512).tsx",
@@ -85,5 +68,9 @@
         "Actual tilesets/tes1 (64).tsx",
         "Map2.tmx"
     ],
-    "tileset.lastUsedFormat": "tsx"
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 32,
+        "width": 32
+    }
 }
