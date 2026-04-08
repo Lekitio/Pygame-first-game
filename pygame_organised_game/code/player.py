@@ -15,7 +15,7 @@ class Player(pygame.sprite.Sprite):
         self.velocity = pygame.math.Vector2()
         self.speed = 300
         self.collision_sprites = collision_sprites
-
+        self.acc = 10
         #Jump
         self.init_jump()
 
@@ -41,17 +41,36 @@ class Player(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
         # preferably get_just_pressed but bugs out # if pygame.key.get_just_pressed()[pygame.K_x] and self.on_ground:
         self.jump(keys, dt) # changes y velocity
-        self.velocity.x = int(keys[pygame.K_RIGHT]) - int(keys[pygame.K_LEFT])
+        self.walking_acceleration(keys, dt)
+        # self.velocity.x = (keys[pygame.K_RIGHT]) - int(keys[pygame.K_LEFT])
 
     def move(self, dt):
+        #jump mechanics
         self.velocity.y += GRAVITY * dt #always affected by gravity
         self.velocity.y = min(self.jump_speed_cap, self.velocity.y)
 
+        # moving and collision
         self.hitbox_rect.x += self.velocity.x * self.speed * dt
         self.collision("x")
         self.hitbox_rect.y += self.velocity.y * dt
         self.collision("y")
         self.rect.center = self.hitbox_rect.center
+
+    def walking_acceleration(self, keys, dt):
+        direction = int(keys[pygame.K_RIGHT]) - int(keys[pygame.K_LEFT])
+
+        max_speed = 1
+        
+        if self.velocity.x * direction < 0: #you are turning
+            self.velocity.x = 0
+        if direction != 0:
+            self.velocity.x += direction * self.acc*dt
+
+            #only while walking do i care about max speed
+            if abs(self.velocity.x) > max_speed:
+                self.velocity.x = max_speed*direction
+        else:
+            self.velocity.x = 0
 
 #Jump methods
     def can_jump_cooldown(self):
