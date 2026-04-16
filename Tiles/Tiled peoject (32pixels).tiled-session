@@ -9,6 +9,13 @@
         "": {
             "scaleInDock": 1
         },
+        "Actual tilesets/player/playerdeafult7.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 2
+        },
+        "Actual tilesets/player/playerdeafult8.tsx": {
+            "scaleInEditor": 1
+        },
         "Actual tilesets/tes1 (64).tsx": {
             "scaleInDock": 0.5,
             "scaleInEditor": 4
@@ -65,7 +72,7 @@
             }
         }
     },
-    "last.imagePath": "C:/Users/Hanna/Documents/Codes/Pygame/Pygame-first-game/Tiles/Tilesets",
+    "last.imagePath": "C:/Users/Hanna/Documents/Codes/Pygame/Pygame-first-game/images",
     "openFiles": [
         "Actual tilesets/walking_tiles 1.tsx",
         "Actual tilesets/walking_tiles 2.tsx",
@@ -74,6 +81,8 @@
     ],
     "project": "",
     "recentFiles": [
+        "Actual tilesets/player/playerdeafult8.tsx",
+        "Actual tilesets/player/playerdeafult7.tsx",
         "Actual tilesets/walking_tiles 1.tsx",
         "Actual tilesets/walking_tiles 2.tsx",
         "Actual tilesets/walking_tiles_upscaled1.tsx",

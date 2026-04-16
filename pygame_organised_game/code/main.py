@@ -43,7 +43,7 @@ class Game:
 
     def run(self):
         while self.running:
-            dt = self.clock.tick(60) / 1000
+            dt = self.clock.tick(120) / 1000
 
             # event loop
             for event in pygame.event.get():

@@ -5,7 +5,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, collision_sprites):
         super().__init__(groups)
         self.scalar = 0.16
-        self.image = pygame.image.load(join("images", "playerdeafult5.png")).convert_alpha()
+        self.image = pygame.image.load(join("images", "playerdeafult2_1.png")).convert_alpha()
         self.image = pygame.transform.smoothscale_by(self.image, self.scalar)
         # self.image.fill((30,50,50))
         self.rect = self.image.get_frect(bottomleft = pos)
@@ -33,6 +33,9 @@ class Player(pygame.sprite.Sprite):
         self.jump_cooldown = 100
         self.jump_speed_cap = 800
         self.jump_velocity_multiplier = 0.6
+
+        #jumping buffer
+        # self.jump_buffer = 0.1
 
         #pos change to checcking collisions instead
         # self.groundy = ground.top
@@ -80,6 +83,13 @@ class Player(pygame.sprite.Sprite):
                 self.can_jump = True
                 self.can_jump_check = True
 
+    # def jump_off_platform(self):
+    #     #timer ig so you can jump for a period after off platform
+    #     #if not jumping and off ground, eg velocity.y >= 0
+    #     if not self.can_jump:
+    #         now = pygame.time.get_ticks()
+    #         if now >= self.last_jump_time + self.jump_buffer:
+
     def landing(self):
         if self.can_jump_check:
             self.last_jump_time = pygame.time.get_ticks()
@@ -87,6 +97,11 @@ class Player(pygame.sprite.Sprite):
         self.can_jump_check = False
         self.can_jump = False
         self.can_jump_cooldown()
+        # if not self.can_jump_check and self.on_ground:
+            #during this short time period
+            #jump has a buffer until its set to False
+        
+
 
     def jump(self, keys, delta_time):
         if keys[self.jump_key] and self.on_ground and self.can_jump:
