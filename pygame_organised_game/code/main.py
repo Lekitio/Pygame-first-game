@@ -9,7 +9,7 @@ from sprites import *
 from groups import AllSprites
 
 from random import randint
-from pytmx.util_pygame import load_pygame
+from pytmx.util_pygame import load_pygame #this is from tiled
 
 class Game:
     def __init__(self):
