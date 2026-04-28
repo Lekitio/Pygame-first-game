@@ -9,7 +9,7 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.smoothscale_by(self.image, self.scalar)
         # self.image.fill((30,50,50))
         self.rect = self.image.get_frect(bottomleft = pos)
-        self.hitbox_rect = self.rect.inflate(-40, -10)
+        self.hitbox_rect = self.rect.inflate(-40, -10) #this checks collisions
 
         #Movement
         self.velocity = pygame.math.Vector2()
@@ -122,7 +122,7 @@ class Player(pygame.sprite.Sprite):
 
     def collision(self, direction):
         for sprite in self.collision_sprites: #this is checking all
-            if sprite.rect.colliderect(self.hitbox_rect):
+            if sprite.rect.colliderect(self.hitbox_rect): 
                 if direction == "x":
                     if self.velocity.x > 0:
                         #moving right
@@ -142,6 +142,16 @@ class Player(pygame.sprite.Sprite):
                         self.on_ground = True
                         self.landing()
     
+    # def do_damage(self, e_sprite):
+    #     e_sprite.health -= self.damage
+    #     #make particles
+
+
+    # def enemy_collision(self, enemy_sprites):
+    #     for e_sprite in enemy_sprites:
+    #         if e_sprite.recct.colliderect(self.hitbox_rect): #if this enemy is hitting player
+
+
     def update(self, dt):
         self.input(dt)
         self.move(dt)
