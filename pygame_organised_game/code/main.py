@@ -23,13 +23,17 @@ class Game:
         # Groups
         self.all_sprites = AllSprites()
         self.collision_sprites = pygame.sprite.Group()
+        self.textboxes = pygame.sprite.Group()
+
 
         self.setup()
 
         # Sprites
         self.player = Player((WINDOW_WIDTH//2, WINDOW_HEIGHT//2), self.all_sprites, self.collision_sprites)
         
-    
+        self.textbox = Textbox((WINDOW_WIDTH//2+100, WINDOW_HEIGHT//2+500), (self.textboxes, self.all_sprites))
+
+        
     def setup(self):
         the_map = load_pygame(join("Tiles", "Map3", "main_map.tmx"))
         # the_map = load_pygame(join("Tiles", "Map2.tmx"))
@@ -63,5 +67,9 @@ class Game:
         pygame.quit()
         
 if __name__ == "__main__": #only if its called main we will run it
-    game = Game()
-    game.run()
+    
+    if not pygame.IS_CE:
+        print("This project uses the pygame-ce version of pygame and wont work otherwise.")
+    else:
+        game = Game()
+        game.run()
