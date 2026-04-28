@@ -16,5 +16,5 @@ class AllSprites(pygame.sprite.Group): #lowkey this is fixing cam
         self.offset.x -= (self.offset.x - target_x)*smooth*dt
         self.offset.y -= (self.offset.y - target_y)*smooth*dt
 
-        for sprite in self: #all the sprites excisting in this class
+        for sprite in self: #all the sprites existing in this class 
             self.display_surface.blit(sprite.image, sprite.rect.topleft + self.offset)

@@ -2,8 +2,8 @@
     "activeFile": "Map3/main_map.tmx",
     "expandedProjectPaths": [
         ".",
-        "Actual tilesets",
-        "Map3"
+        "Map3",
+        "Actual tilesets"
     ],
     "fileStates": {
         "": {
@@ -52,11 +52,11 @@
             "scaleInEditor": 11
         },
         "Map3/main_map.tmx": {
-            "scale": 0.25,
+            "scale": 0.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 742,
-                "y": 910
+                "x": 1173,
+                "y": 989
             }
         },
         "Map3/tes1 (64-32).tsx": {
@@ -81,12 +81,12 @@
     ],
     "project": "",
     "recentFiles": [
-        "Actual tilesets/player/playerdeafult8.tsx",
-        "Actual tilesets/player/playerdeafult7.tsx",
         "Actual tilesets/walking_tiles 1.tsx",
         "Actual tilesets/walking_tiles 2.tsx",
         "Actual tilesets/walking_tiles_upscaled1.tsx",
         "Map3/main_map.tmx",
+        "Actual tilesets/player/playerdeafult8.tsx",
+        "Actual tilesets/player/playerdeafult7.tsx",
         "Map3/untitled.tmx",
         "Map3/tes1 (64-32).tsx",
         "Actual tilesets/test3 (512).tsx",
