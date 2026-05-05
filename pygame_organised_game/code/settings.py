@@ -7,3 +7,5 @@ TILE_SIZE = 32
 GRAVITY = 1300
 
 #import
+
+text_key = pygame.K_SPACE

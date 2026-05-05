@@ -34,8 +34,7 @@ class Game:
         # Sprites
         self.player = Player((WINDOW_WIDTH//2, WINDOW_HEIGHT//2), self.all_sprites, self.collision_sprites)
         
-        self.textbox = Textbox((WINDOW_WIDTH//2+100, WINDOW_HEIGHT//2+500), (self.textboxes, self.all_sprites))
-
+        texts_init(self)
     
         # Constants
         self.framerate = 120
@@ -77,6 +76,8 @@ class Game:
             # draw
             self.all_sprites.draw(self.player.rect.center, dt)
             pygame.display.update()
+
+            texts_update(self, dt)
 
         pygame.quit()
         
