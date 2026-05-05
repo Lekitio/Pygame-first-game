@@ -26,6 +26,8 @@ class Game:
         self.wall_collision_sprites = pygame.sprite.Group() #this is a sprite method, ex of why we add to pygame.sprite.Sprite. Collision sprites will include walls
         self.enemy_collision_sprites = pygame.sprite.Group() #here i wills tore enemies so when collliding with things here you take dmg or do dmg
         self.enemy_sprites = pygame.sprite.Group()
+        self.textboxes = pygame.sprite.Group()
+
 
         self.setup()
 
@@ -33,7 +35,8 @@ class Game:
         self.player = Player((WINDOW_WIDTH//2, WINDOW_HEIGHT//2), self.all_sprites, self.wall_collision_sprites, self.enemy_collision_sprites)
         #enemies will updates whilst the game is running because we have a self.all_sprites thats constantly updating
         
-
+        texts_init(self)
+    
         # Constants
         self.framerate = 120
 
@@ -75,8 +78,14 @@ class Game:
             self.all_sprites.draw(self.player.rect.center, dt)
             pygame.display.update()
 
+            texts_update(self, dt)
+
         pygame.quit()
         
 if __name__ == "__main__": #only if its called main we will run it
-    game = Game()
-    game.run()
+    
+    if not pygame.IS_CE:
+        print("This project uses the pygame-ce version of pygame and wont work otherwise.")
+    else:
+        game = Game()
+        game.run()

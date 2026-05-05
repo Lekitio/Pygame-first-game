@@ -1,5 +1,11 @@
 # Pygame-first-game
 
+Dependencies:
+pytmix
+pygame-ce
+py -m pip install pytmix pygame-ce
+
+
 Learning about pygame right now
 
 
