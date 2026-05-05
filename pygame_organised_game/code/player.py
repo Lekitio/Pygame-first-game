@@ -2,7 +2,7 @@
 from settings import *
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, groups, collision_sprites):
+    def __init__(self, pos, groups, wall_collision_sprites, enemy_collision_sprites):
         super().__init__(groups)
         self.scalar = 0.16
         self.image = pygame.image.load(join("images", "playerdeafult2_1.png")).convert_alpha()
@@ -14,10 +14,20 @@ class Player(pygame.sprite.Sprite):
         #Movement
         self.velocity = pygame.math.Vector2()
         self.speed = 300
-        self.collision_sprites = collision_sprites
+        self.wall_collision_sprites = wall_collision_sprites
         self.acc = 10
         #Jump
         self.init_jump()
+
+    def init_slice(self):
+        #constants
+        self.slice_key = pygame.K_x
+        self.slice_cooldown = 50
+
+        #variables
+        self.slicing = False
+        self.can_slice = True
+
 
     def init_jump(self):
         #variables ig?
@@ -46,6 +56,8 @@ class Player(pygame.sprite.Sprite):
         self.jump(keys, dt) # changes y velocity
         self.walking_acceleration(keys, dt)
         # self.velocity.x = (keys[pygame.K_RIGHT]) - int(keys[pygame.K_LEFT])
+        
+        self.hitting(keys, dt)
 
     def move(self, dt):
         #jump mechanics
@@ -54,10 +66,12 @@ class Player(pygame.sprite.Sprite):
 
         # moving and collision
         self.hitbox_rect.x += self.velocity.x * self.speed * dt
-        self.collision("x")
+        self.wall_collision("x")
         self.hitbox_rect.y += self.velocity.y * dt
-        self.collision("y")
+        self.wall_collision("y")
         self.rect.center = self.hitbox_rect.center
+
+        
 
     def walking_acceleration(self, keys, dt):
         direction = int(keys[pygame.K_RIGHT]) - int(keys[pygame.K_LEFT])
@@ -74,6 +88,24 @@ class Player(pygame.sprite.Sprite):
                 self.velocity.x = max_speed*direction
         else:
             self.velocity.x = 0
+
+    def hitting(self):
+        if self.keys[self.slice_key] and self.can_slice:
+            #slice
+            self.can_slice = False
+            self.last_slice_time = pygame.time.get_ticks()
+
+        self.slicing_cooldown()
+
+        #chck if you change state, falling -> on ground or on ground -> jumping or maybe not necessary if very fast
+
+
+    def slicing_cooldown(self):
+        if not self.can_slice:
+            self.current_slice_time = pygame.time.get_ticks()
+            if self.current_slice_time >= self.last_slice_time + self.slice_cooldown:
+
+    
 
 #Jump methods
     def can_jump_cooldown(self):
@@ -119,9 +151,9 @@ class Player(pygame.sprite.Sprite):
 
         # a speed cap
 
-
-    def collision(self, direction):
-        for sprite in self.collision_sprites: #this is checking all
+    #collision checking
+    def wall_collision(self, direction):
+        for sprite in self.wall_collision_sprites: #this is checking all
             if sprite.rect.colliderect(self.hitbox_rect): 
                 if direction == "x":
                     if self.velocity.x > 0:
@@ -141,6 +173,18 @@ class Player(pygame.sprite.Sprite):
                         self.hitbox_rect.bottom = sprite.rect.top
                         self.on_ground = True
                         self.landing()
+    
+    def enemy_collision(self, slice_direction):
+        for enemy_sprite in self.wall_collision_sprites:
+            if enemy_sprite.rect.colliderect(self.hitbox_rect):
+                #if players hitbox is hitting the enemy_sprite
+                #now I have the "id" of the enemy i'm hitting -> can modify it?
+
+
+    # def collision(self, direction):
+    #     self.wall_collision(direction)
+    #     self.enemy_collision(direction) #lets do that for now, since we have no knife
+        
     
     # def do_damage(self, e_sprite):
     #     e_sprite.health -= self.damage

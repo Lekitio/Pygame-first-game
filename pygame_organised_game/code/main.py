@@ -23,14 +23,15 @@ class Game:
 
         # Groups
         self.all_sprites = AllSprites()
-        self.collision_sprites = pygame.sprite.Group() #this is a sprite method, ex of why we add to pygame.sprite.Sprite. Collision sprites will include walls
+        self.wall_collision_sprites = pygame.sprite.Group() #this is a sprite method, ex of why we add to pygame.sprite.Sprite. Collision sprites will include walls
         self.enemy_collision_sprites = pygame.sprite.Group() #here i wills tore enemies so when collliding with things here you take dmg or do dmg
         self.enemy_sprites = pygame.sprite.Group()
 
         self.setup()
 
         # Sprites
-        self.player = Player((WINDOW_WIDTH//2, WINDOW_HEIGHT//2), self.all_sprites, self.collision_sprites)
+        self.player = Player((WINDOW_WIDTH//2, WINDOW_HEIGHT//2), self.all_sprites, self.wall_collision_sprites, self.enemy_collision_sprites)
+        #enemies will updates whilst the game is running because we have a self.all_sprites thats constantly updating
         
 
         # Constants
@@ -49,10 +50,10 @@ class Game:
         # the_map = load_pygame(join("Tiles", "Map2.tmx"))
         # for obj in the_map.get_layer_by_name("object1 or something liek that"): THIS IS JUST FOR OBJECTS
         #     print(obj.x, obj.y, obj.image)
-            # CollisionSprite((obj.x, obj.y), obj.image, [self.all_sprites, self.collision_sprites]) #pos, surf, groups
+            # CollisionSprite((obj.x, obj.y), obj.image, [self.all_sprites, self.wall_collision_sprites]) #pos, surf, groups
 
         for x, y, image in the_map.get_layer_by_name("Ground_main").tiles():
-            CollisionSprite((x*TILE_SIZE, y*TILE_SIZE), image, [self.all_sprites, self.collision_sprites])
+            CollisionSprite((x*TILE_SIZE, y*TILE_SIZE), image, [self.all_sprites, self.wall_collision_sprites])
             # pygame.Surface.blit(self.main_display, image, )
 
     def run(self):
