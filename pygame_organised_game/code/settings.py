@@ -9,3 +9,5 @@ GRAVITY = 1300
 #import
 
 text_key = pygame.K_SPACE
+slice_key = pygame.K_x
+jump_key = pygame.K_z
