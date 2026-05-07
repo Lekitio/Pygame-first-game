@@ -1,5 +1,6 @@
 from settings import *
 import pygame
+from player import Player
 
 class VisualSprite(pygame.sprite.Sprite):
     def __init__(self, pos, surf, groups):
@@ -26,26 +27,31 @@ class Textbox(VisualSprite):
         super().__init__(pos, self.image, groups)
 
 def texts_init(self):
-    self.keys = pygame.key.get_pressed()
-    self.text_num = 1
+    self.text_num = 0
     self.texts_time = pygame.time.get_ticks()
     self.textbox = Textbox(texts[self.text_num][0], (self.textboxes, self.all_sprites),texts[self.text_num][1])
 
 def texts_update(self, dt):
-    if pygame.time.get_ticks()-self.texts_time >= 5/dt:
-        if self.keys[text_key]:
-            self.texts_time = pygame.time.get_ticks()
-            next_text(self)
+    # checks for right key_press
+    self.keys = pygame.key.get_pressed()
+    if self.keys[text_key]:
+        # checks if delta x,y < 500
+        if abs(self.player.rect.center[0] - self.textbox.rect.center[0]) < 500 and abs(self.player.rect.center[1] - self.textbox.rect.center[1]) < 500:
+            # creates a cooldown between switches
+            if pygame.time.get_ticks()-self.texts_time >= 5/dt:
+                self.texts_time = pygame.time.get_ticks()
+                next_text(self)
 
+# kills old textbox and creates a new one with new pos & text
 def next_text(self):
-    if self.text_num == 3:
+    if self.text_num == len(texts)-1:
         return
     self.text_num += 1
-    if not self.text_num == 0:
-        self.textbox.kill()
+    self.textbox.kill()
+
     self.textbox = Textbox(texts[self.text_num][0], (self.textboxes, self.all_sprites),texts[self.text_num][1])
 
 
-texts = [[(850,1000),"test text which is\nvery long now"],[(900,1000),"test text which is\nvery long now"],[(950,1000),"test text which is\nvery long now"]]
+texts = [[(850,1000),"test text which is\nvery long now"],[(900,1000),"other test text which is\nvery long now"],[(950,1000)," None test text which is\nvery long now"]]
 
     

@@ -24,7 +24,7 @@ class Game:
         # Groups
         self.all_sprites = AllSprites()
         self.collision_sprites = pygame.sprite.Group() #this is a sprite method, ex of why we add to pygame.sprite.Sprite. Collision sprites will include walls
-        self.enemy_collision_sprites = pygame.sprite.Group() #here i wills tore enemies so when collliding with things here you take dmg or do dmg
+        self.enemy_collision_sprites = pygame.sprite.Group() #here i will store enemies so when collliding with things here you take dmg or do dmg
         self.enemy_sprites = pygame.sprite.Group()
         self.textboxes = pygame.sprite.Group()
 
