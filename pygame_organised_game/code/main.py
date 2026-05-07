@@ -7,6 +7,7 @@ from settings import * #all, includes pygame
 from player import Player
 from sprites import *
 from groups import AllSprites
+from texts import *
 # from enemies import Enemy1
 
 from random import randint
