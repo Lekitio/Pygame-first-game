@@ -19,7 +19,7 @@ class Game:
         pygame.init()
         self.main_display = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT)) #from settings
         pygame.display.set_caption("Game name")
-        self.clock = pygame.time.Clock() 
+        self.clock = pygame.time.Clock()
         self.running = True
 
         # Groups
@@ -28,6 +28,7 @@ class Game:
         self.enemy_collision_sprites = pygame.sprite.Group() #here i will store enemies so when collliding with things here you take dmg or do dmg
         self.enemy_sprites = pygame.sprite.Group()
         self.textboxes_sprites = pygame.sprite.Group()
+        self.spirit_sprites = pygame.sprite.Group()
 
 
         self.setup()
@@ -35,6 +36,10 @@ class Game:
         # Sprites
         self.player = Player((WINDOW_WIDTH//2, WINDOW_HEIGHT//2), self.all_sprites, self.collision_sprites)
         
+        self.spirit = Spirit((self.all_sprites,self.spirit_sprites), self, 0, (1800,800))
+        self.spirit2 = Spirit((self.all_sprites,self.spirit_sprites), self, 1, (600, 1000))
+        self.spirit_sprites.spirit_order = [0]*2
+
         texts_init(self)
     
         # Constants
