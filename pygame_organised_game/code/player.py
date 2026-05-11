@@ -1,5 +1,6 @@
 from enemies import *
 from settings import *
+from sprites import VisualSprite
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, wall_collision_sprites, enemy_collision_sprites):
@@ -23,7 +24,7 @@ class Player(pygame.sprite.Sprite):
         self.wall_collision_sprites = wall_collision_sprites
         self.enemy_collision_sprites = enemy_collision_sprites
 
-        self.weapon = Player_weapon()
+        self.weapon = Player_weapon(pos, groups, self)
 
     def init_slice(self):
         #constants
@@ -63,7 +64,7 @@ class Player(pygame.sprite.Sprite):
         self.walking_acceleration(keys, dt)
         # self.velocity.x = (keys[pygame.K_RIGHT]) - int(keys[pygame.K_LEFT])
         
-        self.hitting(keys, dt)
+        self.weapon.hitting(keys, dt)
 
     def move(self, dt):
         #jump mechanics
@@ -194,16 +195,25 @@ class Player(pygame.sprite.Sprite):
         self.input(dt)
         self.move(dt)
         
-class Player_weapon(Player):
+class Player_weapon(VisualSprite):
     #(Player) makes player_weapon be able to acess player
     #Making the weapon to handle combat features
     #both to organise well and to avoid conflicts with collision as a player
-    def __init__(self, pos, groups, wall_collision_sprites, enemy_collision_sprites):
-        super().__init__(pos, groups, wall_collision_sprites, enemy_collision_sprites) #means: Go get these informations from my parent class anc return here with them
-        weapon_rect = self.hitbox_rect.copy()
-    
+    def __init__(self, pos, groups, player):#means: Go get these informations from my parent class anc return here with them
+        self.image = pygame.image.load(join("images", "sword.png")).convert_alpha()
+        self.scalar = 0.02
+        self.image = pygame.transform.smoothscale_by(self.image, self.scalar)
 
-    def hitting(self, keys):
+        self.player = player
+
+        super().__init__(pos, self.image, groups)
+        #weapon_rect = Player.hitbox_rect.copy()
+    
+    def update(self, dt):
+        self.rect.center = self.player.rect.center
+        self.rect.center = (self.rect.center[0] +18, self.rect.center[1])
+
+    def hitting(self, keys, dt):
         if keys[slice_key] and self.can_slice:
 
             temp = self.hitbox_rect.copy()
@@ -213,7 +223,7 @@ class Player_weapon(Player):
             #does this change hitbox rect?
     
     def enemy_collision(self, checking_rect): #returns the list of all the enemy getting collided with
-        collide_list = [enemy for enemy in self.enemy_collision_sprites if checking_rect.colliderect(enemy.rect)] #when looking at individual sprites they are treated as rects?
+        collide_list = [enemy for enemy in self.player.enemy_collision_sprites if checking_rect.colliderect(enemy.rect)] #when looking at individual sprites they are treated as rects?
         # pygame.sprite.spritecollide(checking_rect, self.enemy_collision_sprites, False)
         #(check, list_check, kill?)
         
