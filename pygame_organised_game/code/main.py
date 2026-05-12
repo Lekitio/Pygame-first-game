@@ -7,6 +7,7 @@ from settings import * #all, includes pygame
 from player import Player
 from sprites import *
 from groups import AllSprites
+from texts import *
 # from enemies import Enemy1
 
 from random import randint
@@ -18,7 +19,7 @@ class Game:
         pygame.init()
         self.main_display = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT)) #from settings
         pygame.display.set_caption("Game name")
-        self.clock = pygame.time.Clock() 
+        self.clock = pygame.time.Clock()
         self.running = True
 
         # Groups
@@ -26,7 +27,8 @@ class Game:
         self.wall_collision_sprites = pygame.sprite.Group() #this is a sprite method, ex of why we add to pygame.sprite.Sprite. Collision sprites will include walls
         self.enemy_collision_sprites = pygame.sprite.Group() #here i wills tore enemies so when collliding with things here you take dmg or do dmg
         self.enemy_sprites = pygame.sprite.Group()
-        self.textboxes = pygame.sprite.Group()
+        self.textboxes_sprites = pygame.sprite.Group()
+        self.spirit_sprites = pygame.sprite.Group()
 
 
         self.setup()
@@ -35,6 +37,10 @@ class Game:
         self.player = Player((WINDOW_WIDTH//2, WINDOW_HEIGHT//2), self.all_sprites, self.wall_collision_sprites, self.enemy_collision_sprites)
         #enemies will updates whilst the game is running because we have a self.all_sprites thats constantly updating
         
+        self.spirit = Spirit((self.all_sprites,self.spirit_sprites), self, 0, (1800,800))
+        self.spirit2 = Spirit((self.all_sprites,self.spirit_sprites), self, 1, (600, 1000))
+        self.spirit_sprites.spirit_order = [0]*2
+
         texts_init(self)
     
         # Constants
@@ -77,8 +83,6 @@ class Game:
             # draw
             self.all_sprites.draw(self.player.rect.center, dt)
             pygame.display.update()
-
-            texts_update(self, dt)
 
         pygame.quit()
         

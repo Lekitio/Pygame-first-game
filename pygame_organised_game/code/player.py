@@ -80,7 +80,6 @@ class Player(pygame.sprite.Sprite):
             self.slicing_time_start = pygame.time.get_ticks()
             if self.slicing_time_max > pygame.time.get_ticks()-self.slicing_time_start:
                 self.velocity.x = self.slice_speed * self.slice_direction
-                print("yes")
             else:
                 self.slice_stop()
                 
