@@ -30,10 +30,11 @@ class Player(pygame.sprite.Sprite):
     def init_slice(self):
         #constants
         self.slice_speed = self.max_speed * 3
-        self.slice_cooldown = 50
+        self.slice_cooldown = 500 # milliseconds
         self.hitting_distance = 20 #pixels?
         self.slice_dmg = 1
-        self.slicing_time_max = 50
+        self.slicing_time_max = 500 # milliseconds
+        self.slicing_time_start = 0
 
         #variables
         self.slicing = False
@@ -61,6 +62,7 @@ class Player(pygame.sprite.Sprite):
         # self.groundy = ground.top
 
     def input(self, dt):
+
         keys = pygame.key.get_pressed()
         # preferably get_just_pressed but bugs out # if pygame.key.get_just_pressed()[pygame.K_x] and self.on_ground:
         self.jump(keys, dt) # changes y velocity
@@ -75,9 +77,10 @@ class Player(pygame.sprite.Sprite):
 
     def slice(self, dt):
         if self.direction != 0:
+            if not self.slicing:
+                self.slicing_time_start = pygame.time.get_ticks()
+                self.slice_direction = self.direction
             self.slicing = True
-            self.slice_direction = self.direction
-            self.slicing_time_start = pygame.time.get_ticks()
             if self.slicing_time_max > pygame.time.get_ticks()-self.slicing_time_start:
                 self.velocity.x = self.slice_speed * self.slice_direction
             else:
@@ -218,6 +221,7 @@ class Player(pygame.sprite.Sprite):
     def update(self, dt):
         self.input(dt)
         self.move(dt)
+        self.slicing_cooldown()
         
 class Player_weapon(VisualSprite):
     #(Player) makes player_weapon be able to acess player

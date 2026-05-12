@@ -80,6 +80,8 @@ class Game:
             # update
             self.all_sprites.update(dt)
 
+            self.debug_text_line = str(pygame.time.get_ticks()-self.player.slicing_time_start)
+
             # draw
             self.all_sprites.draw(self.player.rect.center, dt)
             pygame.display.update()
