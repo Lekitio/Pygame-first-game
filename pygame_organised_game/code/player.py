@@ -17,6 +17,7 @@ class Player(pygame.sprite.Sprite):
         self.speed = 300
         self.acc = 10
         self.direction = 0
+        self.max_speed = 1
         #Jump
         self.init_jump()
         self.init_slice()
@@ -28,9 +29,11 @@ class Player(pygame.sprite.Sprite):
 
     def init_slice(self):
         #constants
+        self.slice_speed = self.max_speed * 3
         self.slice_cooldown = 50
         self.hitting_distance = 20 #pixels?
         self.slice_dmg = 1
+        self.slicing_time_max = 50
 
         #variables
         self.slicing = False
@@ -64,7 +67,30 @@ class Player(pygame.sprite.Sprite):
         self.walking_acceleration(keys, dt)
         # self.velocity.x = (keys[pygame.K_RIGHT]) - int(keys[pygame.K_LEFT])
         
-        self.weapon.hitting(keys, dt)
+        if keys[slice_key] and self.can_slice:
+            self.weapon.hitting(dt)
+            self.slice(dt)
+        elif not keys[slice_key] and self.slicing:
+            self.slice_stop()
+
+    def slice(self, dt):
+        if self.direction != 0:
+            self.slicing = True
+            self.slice_direction = self.direction
+            self.slicing_time_start = pygame.time.get_ticks()
+            if self.slicing_time_max > pygame.time.get_ticks()-self.slicing_time_start:
+                self.velocity.x = self.slice_speed * self.slice_direction
+                print("yes")
+            else:
+                self.slice_stop()
+                
+
+    def slice_stop(self):
+        self.slicing = False
+        self.can_slice = False
+        self.last_slice_time = pygame.time.get_ticks()
+
+
 
     def move(self, dt):
         #jump mechanics
@@ -83,18 +109,17 @@ class Player(pygame.sprite.Sprite):
     def walking_acceleration(self, keys, dt):
         self.direction = int(keys[pygame.K_RIGHT]) - int(keys[pygame.K_LEFT])
 
-        max_speed = 1
-        
-        if self.velocity.x * self.direction < 0: #you are turning
-            self.velocity.x = 0
-        if self.direction != 0:
-            self.velocity.x += self.direction * self.acc*dt
+        if not self.slicing: #Makes slice override walking
+            if self.velocity.x * self.direction < 0: #you are turning
+                self.velocity.x = 0
+            if self.direction != 0:
+                self.velocity.x += self.direction * self.acc*dt
 
-            #only while walking do i care about max speed
-            if abs(self.velocity.x) > max_speed:
-                self.velocity.x = max_speed*self.direction
-        else:
-            self.velocity.x = 0
+                #only while walking do i care about max speed
+                if abs(self.velocity.x) > self.max_speed:
+                    self.velocity.x = self.max_speed*self.direction
+            else:
+                self.velocity.x = 0
 
 
             #slice
@@ -107,11 +132,11 @@ class Player(pygame.sprite.Sprite):
         #chck if you change state, falling -> on ground or on ground -> jumping or maybe not necessary if very fast
 
 
-    # def slicing_cooldown(self):
-    #     if not self.can_slice:
-    #         self.current_slice_time = pygame.time.get_ticks()
-    #         if self.current_slice_time >= self.last_slice_time + self.slice_cooldown:
-
+    def slicing_cooldown(self):
+        if not self.can_slice:
+            self.current_slice_time = pygame.time.get_ticks()
+            if self.current_slice_time >= self.last_slice_time + self.slice_cooldown:
+                self.can_slice = True
     
 
 #Jump methods
@@ -199,7 +224,7 @@ class Player_weapon(VisualSprite):
     #(Player) makes player_weapon be able to acess player
     #Making the weapon to handle combat features
     #both to organise well and to avoid conflicts with collision as a player
-    def __init__(self, pos, groups, player):#means: Go get these informations from my parent class anc return here with them
+    def __init__(self, pos, groups, player):
         self.image = pygame.image.load(join("images", "sword.png")).convert_alpha()
         self.scalar = 0.02
         self.image = pygame.transform.smoothscale_by(self.image, self.scalar)
@@ -213,14 +238,12 @@ class Player_weapon(VisualSprite):
         self.rect.center = self.player.rect.center
         self.rect.center = (self.rect.center[0] +18, self.rect.center[1])
 
-    def hitting(self, keys, dt):
-        if keys[slice_key] and self.can_slice:
-
-            temp = self.hitbox_rect.copy()
-            temp.x += self.direction*self.hitting_distance
-            self.enemy_collision(temp) #this is just attacking left and right
-            #sends in a rectangle
-            #does this change hitbox rect?
+    def hitting(self, dt):
+        atk_hitbox = self.player.hitbox_rect.copy()
+        atk_hitbox.x += self.player.direction*self.player.hitting_distance
+        self.enemy_collision(atk_hitbox) #this is just attacking left and right
+        #sends in a rectangle
+        #does this change hitbox rect?
     
     def enemy_collision(self, checking_rect): #returns the list of all the enemy getting collided with
         collide_list = [enemy for enemy in self.player.enemy_collision_sprites if checking_rect.colliderect(enemy.rect)] #when looking at individual sprites they are treated as rects?
@@ -228,8 +251,10 @@ class Player_weapon(VisualSprite):
         #(check, list_check, kill?)
         
         for enemy in collide_list:
-            enemy.handle_hit(self.slice_dmg) #sends it to the enemy class tot ake care of
+            enemy.handle_hit(self.slice_dmg) #sends it to the enemy class to take care of
             
+            self.player.can_slice = False
+            self.player.last_slice_time = pygame.time.get_ticks()
     
             # self.apply_knockback()
                         # self.apply_knockback()
