@@ -6,6 +6,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, wall_collision_sprites, enemy_collision_sprites):
         super().__init__(groups)
         self.scalar = 0.16
+        #when making animations this will be a list of images 1- 3 = idle, 3- 7 = walk, 7-10 = dash or just different lists hihi
         self.image = pygame.image.load(join("images", "playerdeafult2_1.png")).convert_alpha()
         self.image = pygame.transform.smoothscale_by(self.image, self.scalar)
         # self.image.fill((30,50,50))
@@ -18,6 +19,7 @@ class Player(pygame.sprite.Sprite):
         self.acc = 10
         self.direction = 0
         self.max_speed = 1
+        self.last_direction = 1
         #Jump
         self.init_jump()
         self.init_slice()
@@ -106,6 +108,10 @@ class Player(pygame.sprite.Sprite):
         self.wall_collision("y")
         self.rect.center = self.hitbox_rect.center
 
+        #direction checking
+        if self.direction != 0:
+            self.last_direction = self.direction
+
         
 
     def walking_acceleration(self, keys, dt):
@@ -140,6 +146,9 @@ class Player(pygame.sprite.Sprite):
             if self.current_slice_time >= self.last_slice_time + self.slice_cooldown:
                 self.can_slice = True
     
+
+    # def animation(self):
+
 
 #Jump methods
     def can_jump_cooldown(self):
@@ -222,6 +231,7 @@ class Player(pygame.sprite.Sprite):
         self.input(dt)
         self.move(dt)
         self.slicing_cooldown()
+        # self.image = pygame.image.load(join("images", "spirit.png")).convert_alpha()
         
 class Player_weapon(VisualSprite):
     #(Player) makes player_weapon be able to acess player
@@ -239,7 +249,8 @@ class Player_weapon(VisualSprite):
     
     def update(self, dt):
         self.rect.center = self.player.rect.center
-        self.rect.center = (self.rect.center[0] +18, self.rect.center[1])
+        self.rect.center = (self.rect.center[0] +self.player.last_direction*18, self.rect.center[1])
+        print(self.player.on_ground)
 
     def hitting(self, dt):
         atk_hitbox = self.player.hitbox_rect.copy()
